@@ -60,7 +60,6 @@ class Solution:
                     if type(board[i][j])!=str and len(board[i][j])==1:
                         insert_into_board(i,j,list(board[i][j])[0])
         
-        
         def check_to_continue():
             for i in range(size):
                 for j in range(size):
@@ -75,28 +74,32 @@ class Solution:
                         return False
             return True
         
+        list_not_filled=[]
+         
         def solve_backtrack():
             if check_is_finished():
                 return True
             if not check_to_continue():
                 return False
-            for i in range(size):
-                for j in range(size):
-                    if type(board[i][j])!=str:
-                        temp=board[i][j]
-                        for el in temp:
-                            board[i][j]=el
-                            index_row_column=update_row_and_column(i,j)
-                            index_sqr=update_sqr(i,j)
-                            check=solve_backtrack()
-                            if check:
-                                return True
-                            board[i][j]=temp
-                            for (o,p) in index_row_column:
-                                board[o][p].add(el)
-                            for (o,p) in index_sqr:
-                                board[o][p].add(el)
-                        return False
+            (i,j)=list_not_filled.pop()
+            if type(board[i][j])!=str:
+                temp=board[i][j]
+                for el in temp:
+                    board[i][j]=el
+                    index_row_column=update_row_and_column(i,j)
+                    index_sqr=update_sqr(i,j)
+                    check=solve_backtrack()
+                    if check:
+                        return True
+                    board[i][j]=temp
+                    for (o,p) in index_row_column:
+                        board[o][p].add(el)
+                    for (o,p) in index_sqr:
+                        board[o][p].add(el)
+                list_not_filled.append((i,j))
+            else:
+                return solve_backtrack()
+            return False
                 
                     
         #initializing the board ans updating none cells to a list of potential elements
@@ -111,8 +114,16 @@ class Solution:
                 if type(board[i][j])==str:
                     update_row_and_column(i,j)
                     update_sqr(i,j)
+   
         #scaning to solve for simple cases in the start
         for i in range(size*size):
             scan()
+            
+        #updating list_not_filled for backtrack
+        for i in range(size):
+            for j in range(size):
+                if type(board[i][j])!=str:
+                    list_not_filled.append((i,j))
+                    
         # starting backtrack after initial process
         solve_backtrack()
