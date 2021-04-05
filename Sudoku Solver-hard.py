@@ -116,6 +116,7 @@ class Solution:
                     update_sqr(i,j)
    
         #scaning to solve for simple cases in the start
+        #We solve this to reduce the number of iteration in the back track function 
         for i in range(size*size):
             scan()
             
