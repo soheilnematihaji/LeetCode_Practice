@@ -1,4 +1,8 @@
+
 """
+
+This is a question from Adobe interview
+
 a 3X3 cellphone keyword, how many different way to unlock the phone?
 123
 456
